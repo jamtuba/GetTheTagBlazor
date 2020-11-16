@@ -1,0 +1,131 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@*@using System.Security.Claims*@
+@using System.Net.Http
+@using System.Security.Claims
+@using GetTheTagBlazor.Client.Pages
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject HttpClient _httpClient
+
+<AuthorizeView>
+    <Authorized>
+        @if (@context.User.Identity.Name != null)
+        {
+            <ProfileShow Name="@context.User.Identity.Name"/>
+            
+        }
+        <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
+    </Authorized>
+    <NotAuthorized>
+        <a href="authentication/register">Register</a>
+        <a href="authentication/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code{
+    private AppUserDTO[] AppUsers;
+    private AppUserDTO AppUserDTO = new AppUserDTO();
+
+    private string _authMessage;
+    private string _userId;
+    private string _userName;
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
+
+    private async Task BeginSignOut(MouseEventArgs args)
+    {
+        try
+        {
+            await SignOutManager.SetSignOutState();
+            Navigation.NavigateTo("authentication/logout");
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine("Sognout: " + ex.Message);
+        }
+
+    }
+
+    //protected async override Task OnInitializedAsync()
+    //{
+    //    await GetProfilePicture();
+
+    //    await base.OnParametersSetAsync();
+    //}
+
+    protected override async Task OnParametersSetAsync()
+    {
+        //await GetClaimsPrincipalData();
+        await GetProfilePicture();
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task GetProfilePicture()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            _userName = user.Identity.Name;
+            _authMessage = $"{_userName} is authenticated.";
+            _claims = user.Claims;
+            _userId = $"User Id: {user.FindFirst(c => c.Type == "sub")?.Value}";
+
+            AppUserDTO = await _httpClient.GetFromJsonAsync<AppUserDTO>($"/api/ApplicationUser/{_userName}");
+        }
+        else
+        {
+            _authMessage = "The user is NOT authenticated.";
+        }
+
+        if (authState == null)
+        {
+            Console.WriteLine("AuthState er null");
+        }
+
+        if (user == null)
+        {
+            Console.WriteLine("user er null");
+        }
+
+        if(AppUserDTO != null)
+        {
+            Console.WriteLine("Here is the DTO: " + AppUserDTO.FirstName);
+        }
+
+        //AppUserDTO result = new AppUserDTO();
+        //try
+        //{
+
+
+        //    result = AppUsers.Where(x => x.Email == user.Identity.Name).FirstOrDefault();
+        //    Console.WriteLine("Success");
+        //    AppUserDTO = result;
+
+        //    if (result == null)
+        //    {
+        //        Console.WriteLine("Result er null " + result);
+        //        Console.WriteLine("Identity.Name er: " + user.Identity.Name);
+        //    }
+        //}
+        //catch (Exception ex)
+        //{
+
+        //    Console.WriteLine(ex.Message);
+        //}
+        //if (AppUsers == null)
+        //{
+        //    Console.WriteLine("AppUsers er null");
+        //}
+
+        //Console.WriteLine("Result: " + result);
+
+        ////Console.WriteLine("Fornavn0 " + result.FirstName);
+
+        //return result;
+    }
+}

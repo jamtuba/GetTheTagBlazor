@@ -1,0 +1,27 @@
+﻿
+@inject HttpClient _httpClient
+
+@if(!string.IsNullOrWhiteSpace(pictureUrl))
+{
+    <img src="@pictureUrl" style="width: 30px; height: 30px;" />
+}
+
+<a href="authentication/profile">Hej, @firstName!</a>
+
+
+@code {
+    [Parameter] public string Name { get; set; }
+
+    private string pictureUrl;
+    private string firstName;
+    private AppUserDTO AppUser = new AppUserDTO();
+
+    protected async override Task OnInitializedAsync()
+    {
+        AppUser = await _httpClient.GetFromJsonAsync<AppUserDTO>($"/api/ApplicationUser/{Name}");
+
+        pictureUrl = AppUser.ProfilePicture;
+        Console.WriteLine("pic content: " + pictureUrl);
+        firstName = string.IsNullOrWhiteSpace(AppUser.FirstName) ? Name : AppUser.FirstName;
+    }
+}
