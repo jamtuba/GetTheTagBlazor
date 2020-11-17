@@ -31,9 +31,19 @@ namespace GetTheTagBlazor.Server.Controllers
         [HttpGet("{name}")]
         public async Task<ApplicationUser> GetApplicationUser(string name)
         {
-            var appUsersFromDb = await _context.ApplicationUsers.ToListAsync();
-            var appUser = appUsersFromDb.Where(x => x.Email == name).FirstOrDefault();
+            var appUser = new ApplicationUser();
+            if (name != null)
+            {
+                appUser = await _context.ApplicationUsers.Where(x => x.Email == name).FirstOrDefaultAsync();
+            }
             return appUser;
+        }
+
+        [HttpGet]
+        public async Task<List<ApplicationUser>> GetApplicationUsers()
+        {
+            var appUsersFromDb = await _context.ApplicationUsers.ToListAsync();
+            return appUsersFromDb;
         }
 
         //// GET: ApplicationUserController

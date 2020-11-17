@@ -1,0 +1,15 @@
+﻿<td>
+    <img src="@pictureUrl" style="width: 30px; height: 30px;" />
+</td>
+
+@code {
+    [Parameter] public AppUserDTO UserDTO { get; set; }
+    private string pictureUrl;
+
+    
+    protected override void OnInitialized()
+    {
+        pictureUrl = UserDTO.ProfilePicture;
+        Console.WriteLine("pic content: " + pictureUrl);
+    }
+}

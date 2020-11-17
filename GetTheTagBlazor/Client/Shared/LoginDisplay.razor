@@ -36,16 +36,16 @@
 
     private async Task BeginSignOut(MouseEventArgs args)
     {
-        try
-        {
-            await SignOutManager.SetSignOutState();
-            Navigation.NavigateTo("authentication/logout");
-        }
-        catch (Exception ex)
-        {
+        //try
+        //{
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+        //    }
+        //catch (Exception ex)
+        //{
 
-            Console.WriteLine("Sognout: " + ex.Message);
-        }
+        //    Console.WriteLine("Sognout: " + ex.Message);
+        //}
 
     }
 
@@ -56,76 +56,76 @@
     //    await base.OnParametersSetAsync();
     //}
 
-    protected override async Task OnParametersSetAsync()
-    {
-        //await GetClaimsPrincipalData();
-        await GetProfilePicture();
-        await base.OnParametersSetAsync();
-    }
+    //protected override async Task OnParametersSetAsync()
+    //{
+    //    //await GetClaimsPrincipalData();
+    //    await GetProfilePicture();
+    //    await base.OnParametersSetAsync();
+    //}
 
-    private async Task GetProfilePicture()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+    //private async Task GetProfilePicture()
+    //{
+    //    var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    //    var user = authState.User;
 
-        if (user.Identity.IsAuthenticated)
-        {
-            _userName = user.Identity.Name;
-            _authMessage = $"{_userName} is authenticated.";
-            _claims = user.Claims;
-            _userId = $"User Id: {user.FindFirst(c => c.Type == "sub")?.Value}";
+    //    if (user.Identity.IsAuthenticated)
+    //    {
+    //        _userName = user.Identity.Name;
+    //        _authMessage = $"{_userName} is authenticated.";
+    //        _claims = user.Claims;
+    //        _userId = $"User Id: {user.FindFirst(c => c.Type == "sub")?.Value}";
 
-            AppUserDTO = await _httpClient.GetFromJsonAsync<AppUserDTO>($"/api/ApplicationUser/{_userName}");
-        }
-        else
-        {
-            _authMessage = "The user is NOT authenticated.";
-        }
+    //        AppUserDTO = await _httpClient.GetFromJsonAsync<AppUserDTO>($"/api/ApplicationUser/{_userName}");
+    //    }
+    //    else
+    //    {
+    //        _authMessage = "The user is NOT authenticated.";
+    //    }
 
-        if (authState == null)
-        {
-            Console.WriteLine("AuthState er null");
-        }
+    //    if (authState == null)
+    //    {
+    //        Console.WriteLine("AuthState er null");
+    //    }
 
-        if (user == null)
-        {
-            Console.WriteLine("user er null");
-        }
+    //    if (user == null)
+    //    {
+    //        Console.WriteLine("user er null");
+    //    }
 
-        if(AppUserDTO != null)
-        {
-            Console.WriteLine("Here is the DTO: " + AppUserDTO.FirstName);
-        }
+    //    if(AppUserDTO != null)
+    //    {
+    //        Console.WriteLine("Here is the DTO: " + AppUserDTO.FirstName);
+    //    }
 
-        //AppUserDTO result = new AppUserDTO();
-        //try
-        //{
+    //    //AppUserDTO result = new AppUserDTO();
+    //    //try
+    //    //{
 
 
-        //    result = AppUsers.Where(x => x.Email == user.Identity.Name).FirstOrDefault();
-        //    Console.WriteLine("Success");
-        //    AppUserDTO = result;
+    //    //    result = AppUsers.Where(x => x.Email == user.Identity.Name).FirstOrDefault();
+    //    //    Console.WriteLine("Success");
+    //    //    AppUserDTO = result;
 
-        //    if (result == null)
-        //    {
-        //        Console.WriteLine("Result er null " + result);
-        //        Console.WriteLine("Identity.Name er: " + user.Identity.Name);
-        //    }
-        //}
-        //catch (Exception ex)
-        //{
+    //    //    if (result == null)
+    //    //    {
+    //    //        Console.WriteLine("Result er null " + result);
+    //    //        Console.WriteLine("Identity.Name er: " + user.Identity.Name);
+    //    //    }
+    //    //}
+    //    //catch (Exception ex)
+    //    //{
 
-        //    Console.WriteLine(ex.Message);
-        //}
-        //if (AppUsers == null)
-        //{
-        //    Console.WriteLine("AppUsers er null");
-        //}
+    //    //    Console.WriteLine(ex.Message);
+    //    //}
+    //    //if (AppUsers == null)
+    //    //{
+    //    //    Console.WriteLine("AppUsers er null");
+    //    //}
 
-        //Console.WriteLine("Result: " + result);
+    //    //Console.WriteLine("Result: " + result);
 
-        ////Console.WriteLine("Fornavn0 " + result.FirstName);
+    //    ////Console.WriteLine("Fornavn0 " + result.FirstName);
 
-        //return result;
-    }
+    //    //return result;
+    //}
 }

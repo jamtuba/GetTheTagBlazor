@@ -1,0 +1,9 @@
+﻿<tr>
+    <td>@AppUser.FirstName</td>
+    <td>@AppUser.LastName</td>
+    <td>@AppUser.Email</td>
+</tr>
+
+@code {
+    [Parameter] public AppUserDTO AppUser { get; set; }
+}
