@@ -6,6 +6,7 @@
 @using System.Net.Mime;
 @inject IHttpService _httpService
 @inject HttpClient _httpClient
+@inject NavigationManager _navigationManager
 
 <h3>GetTheTag From The Picture</h3>
 <form>
@@ -32,11 +33,11 @@
         {
             goForComponent = true;
         };
-        StateHasChanged();
     }
 
     private void ResetInputField()
     {
         inputUrl = "";
+        goForComponent = false;
     }
 }
