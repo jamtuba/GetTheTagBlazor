@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/GetTheTagBlazor/Client/wwwroot/appsettings.json
+/GetTheTagBlazor/Server/appsettings.json
+/GetTheTagBlazor/Server/appsettings.Development.json

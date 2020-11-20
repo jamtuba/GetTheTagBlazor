@@ -26,6 +26,7 @@ namespace GetTheTagBlazor.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("GetTheTagBlazor.ServerAPI"));
 
             builder.Services.AddScoped<IHttpService, HttpService>();
+            builder.Services.AddScoped<IConfigService, ConfigService>();
 
             builder.Services.AddApiAuthorization();
 

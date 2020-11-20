@@ -1,8 +1,10 @@
 ﻿@using System.Text;
 @using Newtonsoft.Json;
 @using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+@using GetTheTagBlazor.Client.Helpers
 
 @inject HttpClient _httpClient
+@inject IConfigService _configService
 
 @if (caption == "")
 {
@@ -10,45 +12,54 @@
 }
 else
 {
-<div style="padding: 10px;">
-    
-    <h4>Caption:</h4>
-    @caption
-    
-</div>
-<div style="padding: 10px;">
-    @if (categories.Count == 0)
-    {
-        <p><em>Der er ingen Categories fundet.</em></p>
-    }
-    else
-    {
-        <h4>Categories:</h4>
-        <ul>
-            @foreach (var cat in categories)
+<div class="modal-body row">
+    <div class="col-md-6">
+
+
+        @*Add picture here!!!*@
+
+
+        <div style="padding: 10px;">
+            <h4>Caption:</h4>
+            @caption
+        </div>
+        <div style="padding: 10px;">
+            @if (categories.Count == 0)
             {
-                <li>@cat.Name.ToString()</li>
+                <p><em>Der er ingen Categories fundet.</em></p>
             }
-        </ul>
-    }
-</div>
-<div style="padding: 10px;">
-    @if (tags.Count == 0)
-    {
-        <p><em>Der er ingen Tags fundet.</em></p>
-    }
-    else
-    {
-        <h4>Tags:</h4>
-        <ul>
-            @foreach (var tag in tags)
+            else
             {
-                <li>@tag.Name.ToString()</li>
+                <h4>Categories:</h4>
+                <ul>
+                    @foreach (var cat in categories)
+                    {
+                        <li>@cat.Name.ToString()</li>
+                    }
+                </ul>
             }
-        </ul>
-    }
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div style="padding: 10px;">
+            @if (tags.Count == 0)
+            {
+                <p><em>Der er ingen Tags fundet.</em></p>
+            }
+            else
+            {
+                <h4>Tags:</h4>
+                <ul>
+                    @foreach (var tag in tags)
+                    {
+                        <li>@tag.Name.ToString()</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
 </div>
-}
+        }
 
 @code{
     [Parameter] public string inputUrl { get; set; }
@@ -66,13 +77,11 @@ else
     {
         HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, ToString());
 
-        var reqUrl = "https://uss-exam-func-app.azurewebsites.net/api/HttpTriggerGetTheTag?code=7szykiYv4e1TQd2iPD3WpYNUaCroMMcwIqi2XhUfQ7Zdq2aa67MS1w==";
+        var reqUrl = _configService.GetUrl("Services", "ReqUrl");
 
-        //var stringForJson = @"{'url': '" + inputUrl + "'}";
+        Console.WriteLine("regUrl: " + reqUrl);
 
         var stringForJson = JsonConvert.SerializeObject(new UrlDTO { url = inputUrl });
-
-        //var json = JsonConvert.DeserializeObject(stringForJson);
 
         var request = new HttpRequestMessage
         {
