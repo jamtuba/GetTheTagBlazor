@@ -130,6 +130,7 @@ namespace GetTheTagBlazor.Server.Areas.Identity.Pages.Account.Manage
             if (Input.ProfilePicture != user.ProfilePicture)
             {
                 user.ProfilePicture = Input.ProfilePicture;
+                // Lav metode der ændrer profilbilledet i Blob
             }
 
             await _userManager.UpdateAsync(user);

@@ -1,0 +1,27 @@
+﻿@page "/user/edit"
+<h3>EditUser</h3>
+
+<EditForm Model="@AppUser" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <label for="Fornavn">
+        <InputText id="firstName" @bind-Value="AppUser.FirstName" />
+    </label>
+
+    <InputText id="lastName" @bind-Value="AppUser.LastName" />
+    <InputText id="email" @bind-Value="AppUser.Email" />
+
+    <InputText />
+
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private AppUserDTO AppUser = new AppUserDTO();
+
+    private void HandleValidSubmit()
+    {
+
+    }
+}

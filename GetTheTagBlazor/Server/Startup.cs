@@ -12,7 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Linq;
+using System.Net.Http;
 
 namespace GetTheTagBlazor.Server
 {
@@ -41,6 +43,8 @@ namespace GetTheTagBlazor.Server
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
+            services.AddScoped<HttpClient, HttpClient>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -1,0 +1,18 @@
+﻿@page "/tester"
+<h1>Status: @Status</h1>
+<EditForm Model=@Person OnSubmit=@FormSubmitted>
+    <input type="submit" value="Submit" class="btn btn-primary" />
+</EditForm>
+@code
+{
+    string Status = "Not submitted";
+    bool yesOrNo = false;
+    TagDTO Person = new TagDTO();
+    void FormSubmitted()
+    {
+        Status = (yesOrNo) ? "Form submitted" : "Not submitted";
+        yesOrNo = !yesOrNo;
+
+        // Post data to the server, etc
+    }
+}

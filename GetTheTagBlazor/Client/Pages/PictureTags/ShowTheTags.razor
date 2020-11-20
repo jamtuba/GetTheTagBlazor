@@ -1,0 +1,93 @@
+﻿@using System.Text;
+@using Newtonsoft.Json;
+@using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
+
+@inject HttpClient _httpClient
+
+@if (caption == "")
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<div style="padding: 10px;">
+    
+    <h4>Caption:</h4>
+    @caption
+    
+</div>
+<div style="padding: 10px;">
+    @if (categories.Count == 0)
+    {
+        <p><em>Der er ingen Categories fundet.</em></p>
+    }
+    else
+    {
+        <h4>Categories:</h4>
+        <ul>
+            @foreach (var cat in categories)
+            {
+                <li>@cat.Name.ToString()</li>
+            }
+        </ul>
+    }
+</div>
+<div style="padding: 10px;">
+    @if (tags.Count == 0)
+    {
+        <p><em>Der er ingen Tags fundet.</em></p>
+    }
+    else
+    {
+        <h4>Tags:</h4>
+        <ul>
+            @foreach (var tag in tags)
+            {
+                <li>@tag.Name.ToString()</li>
+            }
+        </ul>
+    }
+</div>
+}
+
+@code{
+    [Parameter] public string inputUrl { get; set; }
+
+    private TagDTO tagDTOToShow = new TagDTO();
+    private UrlDTO urlDTO = new UrlDTO();
+
+
+    private List<ImageTag> tags = new List<ImageTag>();
+    private List<Category> categories = new List<Category>();
+    private string caption = "";
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, ToString());
+
+        var reqUrl = "https://uss-exam-func-app.azurewebsites.net/api/HttpTriggerGetTheTag?code=7szykiYv4e1TQd2iPD3WpYNUaCroMMcwIqi2XhUfQ7Zdq2aa67MS1w==";
+
+        //var stringForJson = @"{'url': '" + inputUrl + "'}";
+
+        var stringForJson = JsonConvert.SerializeObject(new UrlDTO { url = inputUrl });
+
+        //var json = JsonConvert.DeserializeObject(stringForJson);
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(reqUrl),
+            Content = new StringContent(stringForJson, Encoding.UTF8, "text/plain")
+        };
+
+        var newResponse = await _httpClient.SendAsync(request);
+        newResponse.EnsureSuccessStatusCode();
+
+        var tagDTOToShow = await newResponse.Content.ReadFromJsonAsync<TagDTO>();
+
+        caption = tagDTOToShow.Caption.Text;
+        tags = tagDTOToShow.Tags.ToList();
+        categories = tagDTOToShow.Categories.ToList();
+    }
+}

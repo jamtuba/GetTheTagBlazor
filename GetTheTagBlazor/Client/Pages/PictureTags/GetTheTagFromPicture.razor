@@ -1,0 +1,42 @@
+﻿@page "/tags"
+@using GetTheTagBlazor.Client.Helpers
+@using System.Text;
+@using System.Net.Http.Headers;
+@using Newtonsoft.Json;
+@using System.Net.Mime;
+@inject IHttpService _httpService
+@inject HttpClient _httpClient
+
+<h3>GetTheTag From The Picture</h3>
+<form>
+    <input @bind-value="@inputUrl" placeholder="Skriv din url her..." title="input Url" />
+    <button type="button" class="btn btn-primary" @onclick="SendPictureToDB">Send</button>
+    <button type="reset" class="btn btn-danger" @onclick="ResetInputField">Nulstil</button>
+</form>
+
+
+@if(goForComponent)
+    {
+        <ShowTheTags inputUrl="@inputUrl" />
+    }
+
+
+@code {
+    //private TagDTO tagDTO = new TagDTO();
+    private string inputUrl = "";
+    private bool goForComponent = false;
+
+    private void SendPictureToDB()
+    {
+        if (ValidateImageUrl.Validate(inputUrl))
+        {
+            goForComponent = true;
+        };
+        StateHasChanged();
+    }
+
+    private void ResetInputField()
+    {
+        inputUrl = "";
+    }
+}
