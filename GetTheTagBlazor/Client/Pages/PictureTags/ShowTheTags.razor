@@ -8,16 +8,35 @@
 
 @if (caption == "")
 {
-    <p><em>Loading...</em></p>
+    @*<p><em>Loading...</em></p>*@
+    <img src="https://mir-s3-cdn-cf.behance.net/project_modules/disp/552dd336197347.57136163e85ec.gif"/>
 }
 else
 {
 <div class="modal-body row">
     <div class="col-md-6">
+        <div style="padding: 10px;">
+            @if (tags.Count == 0)
+            {
+                <p><em>Der er ingen Tags fundet.</em></p>
+            }
+            else
+            {
+                <h4>Tags:</h4>
+                <ul>
+                    @foreach (var tag in tags)
+                    {
+                        <li>@tag.Name.ToString()</li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
 
 
-        @*Add picture here!!!*@
-
+        @*Add picture here!!! from storage....!!!*@
+        <img src="@inputUrl" style="max-width: 200px; max-height: 300px; border-style: solid; border-width: medium;" />
 
         <div style="padding: 10px;">
             <h4>Caption:</h4>
@@ -35,24 +54,6 @@ else
                     @foreach (var cat in categories)
                     {
                         <li>@cat.Name.ToString()</li>
-                    }
-                </ul>
-            }
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div style="padding: 10px;">
-            @if (tags.Count == 0)
-            {
-                <p><em>Der er ingen Tags fundet.</em></p>
-            }
-            else
-            {
-                <h4>Tags:</h4>
-                <ul>
-                    @foreach (var tag in tags)
-                    {
-                        <li>@tag.Name.ToString()</li>
                     }
                 </ul>
             }

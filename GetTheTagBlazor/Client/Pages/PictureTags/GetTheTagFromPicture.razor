@@ -17,24 +17,34 @@
     {
         <ShowTheTags inputUrl="@inputUrl" />
     }
+@if (notValidated)
+{
+    <h6 style="color: red;"><em>Please add a valid imageurl</em></h6>
+}
 
 
 @code {
     //private TagDTO tagDTO = new TagDTO();
     private string inputUrl = "";
     private bool goForComponent = false;
+    private bool notValidated = false;
 
     private void SendPictureToDB()
     {
         if (ValidateImageUrl.Validate(inputUrl))
         {
             goForComponent = true;
-        };
+        }
+        else
+        {
+            notValidated = true;
+        }
     }
 
     private void ResetInputField()
     {
         inputUrl = "";
         goForComponent = false;
+        notValidated = false;
     }
 }
